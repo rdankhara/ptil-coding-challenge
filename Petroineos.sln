@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2008
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Petroineos.PowerServiceImpl", "Petroineos.PowerServiceImpl\Petroineos.PowerServiceImpl.csproj", "{A4E92E9A-B370-42A0-B710-8302A6304915}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{F83751D5-AFEB-47AB-AEA0-247D40F2C1B6}"
+	ProjectSection(SolutionItems) = preProject
+		Lib\PowerService.dll = Lib\PowerService.dll
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Petroineos.PowerServiceImpl.Tests", "Petroineos.PowerServiceImpl.Tests\Petroineos.PowerServiceImpl.Tests.csproj", "{98EAA8A5-B43D-4E26-91E4-A9C4BD5E7F5E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A961DB1E-9CEF-4169-AE24-972D9F5B5475}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Petroineos.PositionExporterService", "Petroineos.PositionExporterService\Petroineos.PositionExporterService.csproj", "{0DE75324-D7D7-47F1-910F-06BA8ED4FD3A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A4E92E9A-B370-42A0-B710-8302A6304915}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4E92E9A-B370-42A0-B710-8302A6304915}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4E92E9A-B370-42A0-B710-8302A6304915}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4E92E9A-B370-42A0-B710-8302A6304915}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98EAA8A5-B43D-4E26-91E4-A9C4BD5E7F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98EAA8A5-B43D-4E26-91E4-A9C4BD5E7F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98EAA8A5-B43D-4E26-91E4-A9C4BD5E7F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98EAA8A5-B43D-4E26-91E4-A9C4BD5E7F5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DE75324-D7D7-47F1-910F-06BA8ED4FD3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DE75324-D7D7-47F1-910F-06BA8ED4FD3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DE75324-D7D7-47F1-910F-06BA8ED4FD3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DE75324-D7D7-47F1-910F-06BA8ED4FD3A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0460FE5D-BDF5-4355-A4DF-FDC1A3F95FD6}
+	EndGlobalSection
+EndGlobal
