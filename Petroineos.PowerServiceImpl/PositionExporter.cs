@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -7,10 +8,12 @@ namespace Petroineos.PowerServiceImpl
     public class PositionExporter : IPositionExporter
     {
         private readonly IConfigurationProvider configurationProvider;
+        private readonly ILogger<PositionExporter> logger;
 
-        public PositionExporter(IConfigurationProvider configurationProvider)
+        public PositionExporter(IConfigurationProvider configurationProvider, ILogger<PositionExporter> logger)
         {
             this.configurationProvider = configurationProvider;
+            this.logger = logger;
         }
 
         private string buildFileLocation(string filename)

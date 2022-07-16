@@ -8,7 +8,7 @@ namespace Petroineos.PowerServiceImpl
 
         public DateTime GetDate()
         {
-            lastUsedDate = DateTime.UtcNow;
+            lastUsedDate = DateTime.Now;
             return lastUsedDate;
         }
 

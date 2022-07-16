@@ -1,4 +1,5 @@
-﻿using Services;
+﻿using Microsoft.Extensions.Logging;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,11 @@ namespace Petroineos.PowerServiceImpl
     public class PositionProvider : IPostionProvider
     {
         private IPowerService _powerService;
-
-        public PositionProvider(IPowerService powerService)
+        private ILogger<PositionProvider> _logger;
+        public PositionProvider(IPowerService powerService, ILogger<PositionProvider> logger)
         {
-            _powerService = powerService;
+            this._powerService = powerService;
+            this._logger = logger;
         }
 
         private IEnumerable<Position> AggregatePowerTrades(IEnumerable<PowerTrade> powerTrades)
@@ -26,13 +28,16 @@ namespace Petroineos.PowerServiceImpl
         }
         public IEnumerable<Position> GetPosition(IDateProvider dateProvider)
         {
-            return AggregatePowerTrades(_powerService.GetTrades(dateProvider.GetDate()));
+            var date = dateProvider.GetDate();
+            _logger.LogInformation($"GetPosition at {date}");
+            return AggregatePowerTrades(_powerService.GetTrades(date));
         }
 
         public async Task<IEnumerable<Position>> GetPositionAsync(IDateProvider dateProvider)
         {
-            var powerTrades = await _powerService.GetTradesAsync(dateProvider.GetDate());
-
+            var date = dateProvider.GetDate();
+            _logger.LogInformation($"GetPosition at {date}");
+            var powerTrades = await _powerService.GetTradesAsync(date);
             return await Task.FromResult(AggregatePowerTrades(powerTrades));
         }
     }

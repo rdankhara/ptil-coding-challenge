@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
 using Services;
 using System;
@@ -14,7 +15,7 @@ namespace Petroineos.PowerServiceImpl.Tests
     {
         private Mock<IPowerService> _mockPowerService;
         private Mock<IDateProvider> _mockDateProvider;
-
+        private Mock<ILogger<PositionProvider>> _mockPositionProviderLogger;
         public void MyTestMethod()
         {
 
@@ -26,6 +27,7 @@ namespace Petroineos.PowerServiceImpl.Tests
             _mockDateProvider = new Mock<IDateProvider>();
             _mockDateProvider.Setup(x => x.GetDate()).Returns(DateTime.Now);
             _mockPowerService = new Mock<IPowerService>(MockBehavior.Default);
+            _mockPositionProviderLogger = new Mock<ILogger<PositionProvider>>(MockBehavior.Default);
         }
 
         [Test]
@@ -36,7 +38,7 @@ namespace Petroineos.PowerServiceImpl.Tests
             var fakeResponse = FakePowerTrades.GetFakePowerTradesResponse(date);
             _mockPowerService.Setup(x => x.GetTrades(date)).Returns(fakeResponse);
 
-            PositionProvider powerPosition = new PositionProvider(_mockPowerService.Object);
+            PositionProvider powerPosition = new PositionProvider(_mockPowerService.Object, _mockPositionProviderLogger.Object);
             var positions = powerPosition.GetPosition(dateProvider);
 
             Dictionary<int, double> dictionary = new Dictionary<int, double>();

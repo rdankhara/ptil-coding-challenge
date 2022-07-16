@@ -22,7 +22,6 @@ namespace Petroineos.PositionExporterService
             service.Description = "Exports powertrade positions to csv";
             service.ServiceName = "PositionExporterService";
             service.StartType = ServiceStartMode.Automatic;
-            service.DelayedAutoStart = true;
             Installers.Add(process);
             Installers.Add(service);
         }

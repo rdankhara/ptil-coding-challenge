@@ -1,32 +1,52 @@
 ﻿using Petroineos.PowerServiceImpl;
-using Services;
 using System;
 using System.Collections.Specialized;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Timers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Petroineos.PositionExporterService
 {
     public class PositionExporterService : ServiceBase
     {
-        Timer timer;
-        NameValueCollection appSettings;
-        public PositionExporterService()
+        Timer _timer;
+        NameValueCollection _appSettings;
+        static IHost _host;
+        IDateProvider _dateProvider;
+        IPostionProvider _positionProvider;
+        IPositionExporter _exporter;
+        DateFormatter _dateFormatter;
+        ILogger<PositionExporterService> _logger;
+
+        static PositionExporterService()
+        {
+            
+        }
+
+        public PositionExporterService(IDateProvider dateProvider, IPositionExporter positionExporter, IPostionProvider postionProvider, DateFormatter dateFormatter, ILogger<PositionExporterService> logger)
         {
             base.ServiceName = "PositionExporterService";
+            _dateProvider = dateProvider;
+            _positionProvider = postionProvider;
+            _exporter = positionExporter;
+            _dateFormatter = dateFormatter;
+            _logger = logger;
         }
 
         protected async override void OnStart(string[] args)
         {
-            Console.WriteLine("On-PostionExporterService-start");
-            appSettings = System.Configuration.ConfigurationManager.AppSettings;
-            var interval = int.Parse(appSettings.Get("Interval"));
-            Console.WriteLine($"Interval:${interval}");
-            timer = new Timer(interval);
-            timer.AutoReset = true;
-            timer.Elapsed += Handler;
-            timer.Start();
+            _logger.LogInformation("On-PostionExporterService-start");
+            _appSettings = System.Configuration.ConfigurationManager.AppSettings;
+            var interval = int.Parse(_appSettings.Get("Interval"));
+
+            _logger.LogInformation($"Interval:${interval}");
+            _timer = new Timer(interval);
+            _timer.AutoReset = true;
+            _timer.Elapsed += Handler;
+            _timer.Start();
             await ExportPositions();
         }
 
@@ -38,7 +58,7 @@ namespace Petroineos.PositionExporterService
         protected override void OnStop()
         {
             base.OnStop();
-            timer.Elapsed -= Handler;
+            _timer.Elapsed -= Handler;
         }
 
         private async Task ExportPositions()
@@ -46,15 +66,9 @@ namespace Petroineos.PositionExporterService
             try
             {
                 Console.WriteLine("Constructing objects");
-                IDateProvider dateProvider = new DateProvider();
-                IPostionProvider positionProvider = new PositionProvider(new PowerService());
-                IConfigurationProvider configurationProvider = new ConfigurationProvider(appSettings);
-                IPositionExporter exporter = new PositionExporter(configurationProvider);
-                var formatter = new DateFormatter();
-                Console.WriteLine("objects constructed fetching trades");
-                var positions = await positionProvider.GetPositionAsync(dateProvider);
+                var positions = await _positionProvider.GetPositionAsync(_dateProvider);
                 Console.WriteLine("trades fetched");
-                await exporter.ExportAsync(positions, $"{formatter.GetDateForCSVName(dateProvider)}.csv");
+                await _exporter.ExportAsync(positions, $"{_dateFormatter.GetDateForCSVName(_dateProvider)}.csv");
             }
             catch (Exception e)
             {
@@ -65,7 +79,16 @@ namespace Petroineos.PositionExporterService
 
         public static void Main()
         {
-            ServiceBase.Run(new PositionExporterService());
+            _host = ServiceInitializer.Initialize();
+            ServiceBase service = _host.Services.GetService<PositionExporterService>();
+            Console.WriteLine("Service Instantiated successfully");
+            ServiceBase.Run(service);
+        }
+
+        protected override void OnShutdown()
+        {
+            base.OnShutdown();
+            _host.Dispose();
         }
 
         private void InitializeComponent()
